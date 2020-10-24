@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FieldOfView : MonoBehaviour
+public class FieldOfViewEffect : MonoBehaviour
 {
     public MeshFilter Mesh_Filter;
 
