@@ -132,9 +132,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30a615f53d3440d42a2c13669c266dbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerCamera: {fileID: 0}
-  PlayerNavMeshAgent: {fileID: 3802906813424207928}
-  Character: {fileID: -3964211308609361673}
+  playerNavMeshAgent: {fileID: 3802906813424207928}
+  mover: {fileID: -3964211308609361673}
 --- !u!195 &3802906813424207928
 NavMeshAgent:
   m_ObjectHideFlags: 0

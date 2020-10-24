@@ -12,20 +12,7 @@ public class CommandController : MonoBehaviour
     }
     #endregion
 
-    public static Vector3? GetDestination()
-    {
-        if (Instance == null) return null;
-        return Instance.destinationSet ? (Vector3?)Instance.destination : null;
-    }
-
-    public static void UnsetDestination()
-    {
-        if (Instance == null) return;
-        Instance.destinationSet = false;
-    }
-
-    private Vector3 destination;
-    private bool destinationSet = false;
+    public static List<PlayerBehaviour> Selected = new List<PlayerBehaviour>();
 
     void Update()
     {
@@ -44,8 +31,10 @@ public class CommandController : MonoBehaviour
 
         if (Physics.Raycast(clickRay, out var hit))
         {
-            destination = hit.point;
-            destinationSet = true;
+            foreach(var selected in Selected)
+            {
+                selected.AssignNewAction(new NavMoverAction(hit.point, selected.transform));
+            }
         }
     }
 }

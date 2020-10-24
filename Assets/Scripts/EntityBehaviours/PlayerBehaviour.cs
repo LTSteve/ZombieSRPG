@@ -6,41 +6,34 @@ using UnityStandardAssets.Characters.ThirdPerson;
 
 public class PlayerBehaviour : MonoBehaviour
 {
-    public NavMeshAgent PlayerNavMeshAgent;
+    [SerializeField] private NavMeshAgent playerNavMeshAgent;
+    [SerializeField] private ThirdPersonMover mover;
 
-    public ThirdPersonMover Character;
+    private IEntityAction activeAction;
 
-    void Start()
+    private void Start()
     {
-        PlayerNavMeshAgent.updateRotation = false;
+        playerNavMeshAgent.updateRotation = false;
+
+        /*
+         * TEMPORARY HACK 
+         * TODO: ADD BOX SELECT AND SELECTION STUFF
+         */
+        CommandController.Selected.Add(this);
     }
 
-    void Update()
+    private void Update()
     {
-        _checkForNewDestination();
-
-        _updateCharacterAnimation();
-    }
-
-    private void _checkForNewDestination()
-    {
-        var newDestination = CommandController.GetDestination();
-
-        if (newDestination.HasValue)
+        if(activeAction != null)
         {
-            PlayerNavMeshAgent.SetDestination(newDestination.Value);
+            activeAction.Update();
         }
     }
 
-    private void _updateCharacterAnimation()
+    public void AssignNewAction(IEntityAction newAction)
     {
-        if (PlayerNavMeshAgent.remainingDistance > PlayerNavMeshAgent.stoppingDistance)
-        {
-            Character.Move(PlayerNavMeshAgent.desiredVelocity, false, false);
-        }
-        else
-        {
-            Character.Move(Vector3.zero, false, false);
-        }
+        if (activeAction != null && !activeAction.IsDone()) activeAction.Abort();
+
+        activeAction = newAction;
     }
 }
