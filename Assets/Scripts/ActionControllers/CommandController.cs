@@ -33,8 +33,30 @@ public class CommandController : MonoBehaviour
         {
             foreach(var selected in Selected)
             {
-                selected.AssignNewAction(new NavMoverAction(hit.point, selected.transform));
+                if(hit.transform.gameObject.layer == 10)
+                {
+                    selected.AssignNewAction(new LookAtAction(hit.transform, selected.transform.Find("Rig/AimTarget").GetComponent<TargetingEffect>()));
+                }
+                else
+                {
+                    selected.AssignNewAction(new NavMoverAction(hit.point, selected.transform));
+                }
             }
         }
+        /*
+        var allHits = Physics.RaycastAll(clickRay);
+
+        foreach(var raycastHit in allHits)
+        {
+            if (raycastHit.transform.gameObject.layer == 10)
+            {
+                Debug.Log("Entity");
+            }
+            else
+            {
+                Debug.Log("NotEntity");
+            }
+        }
+        */
     }
 }
