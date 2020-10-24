@@ -4,42 +4,32 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityStandardAssets.Characters.ThirdPerson;
 
-public class PlayerController : MonoBehaviour
+public class PlayerBehaviour : MonoBehaviour
 {
-    public Camera PlayerCamera;
     public NavMeshAgent PlayerNavMeshAgent;
 
-    public CrouchlessThirdPersonCharacter Character;
+    public ThirdPersonMover Character;
 
     void Start()
     {
-        PlayerCamera = Camera.main;
-
         PlayerNavMeshAgent.updateRotation = false;
     }
 
     void Update()
     {
-        _checkForMouseClick();
+        _checkForNewDestination();
 
         _updateCharacterAnimation();
     }
 
-    private void _checkForMouseClick()
+    private void _checkForNewDestination()
     {
-        if (!Input.GetMouseButtonDown(0))
+        var newDestination = CommandController.GetDestination();
+
+        if (newDestination.HasValue)
         {
-            return;
+            PlayerNavMeshAgent.SetDestination(newDestination.Value);
         }
-
-        var clickRay = PlayerCamera.ScreenPointToRay(Input.mousePosition);
-
-        if(!Physics.Raycast(clickRay,out var hit))
-        {
-            return;
-        }
-
-        PlayerNavMeshAgent.SetDestination(hit.point);
     }
 
     private void _updateCharacterAnimation()

@@ -4,10 +4,10 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityStandardAssets.Characters.ThirdPerson;
 
-public class EnemyController : MonoBehaviour
+public class EnemyBehaviour : MonoBehaviour
 {
     public NavMeshAgent EnemyNavMeshAgent;
-    public CrouchlessThirdPersonCharacter Character;
+    public ThirdPersonMover Character;
 
     void Start()
     {
