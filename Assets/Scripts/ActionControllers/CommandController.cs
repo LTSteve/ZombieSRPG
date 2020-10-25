@@ -20,6 +20,10 @@ public class CommandController : MonoBehaviour
     }
 
 
+    private Vector3 raycastStart;
+    private Vector3 raycastEnd;
+    private bool drawGizmos = false;
+
     private void _checkForMouseClick()
     {
         if (!Input.GetMouseButtonDown(0) || Camera.main == null)
@@ -29,7 +33,7 @@ public class CommandController : MonoBehaviour
 
         var clickRay = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        if (Physics.Raycast(clickRay, out var hit))
+        if (Physics.Raycast(clickRay, out var hit, LayerMask.GetMask(new string[] { "Entities", "Default" })))
         {
             foreach(var selected in Selected)
             {
@@ -41,22 +45,18 @@ public class CommandController : MonoBehaviour
                 {
                     selected.AssignNewAction(new NavMoverAction(hit.point, selected.transform));
                 }
+                drawGizmos = true;
+                raycastStart = Camera.main.transform.position;
+                raycastEnd = hit.point;
             }
         }
-        /*
-        var allHits = Physics.RaycastAll(clickRay);
+    }
 
-        foreach(var raycastHit in allHits)
-        {
-            if (raycastHit.transform.gameObject.layer == 10)
-            {
-                Debug.Log("Entity");
-            }
-            else
-            {
-                Debug.Log("NotEntity");
-            }
-        }
-        */
+    private void OnDrawGizmos()
+    {
+        if (!drawGizmos) return;
+        Gizmos.color = Color.green;
+        Gizmos.DrawLine(raycastStart, raycastEnd);
+        Gizmos.DrawSphere(raycastEnd, 0.2f);
     }
 }

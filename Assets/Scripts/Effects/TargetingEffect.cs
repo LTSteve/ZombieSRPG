@@ -6,9 +6,9 @@ using UnityEngine.Animations.Rigging;
 public class TargetingEffect : MonoBehaviour
 {
     [SerializeField]
-    private Rig headAimRig;
+    private Rig headAimRig = null;
     [SerializeField]
-    private Rig bodyAimRig;
+    private Rig bodyAimRig = null;
 
     private Transform target;
 
@@ -43,8 +43,10 @@ public class TargetingEffect : MonoBehaviour
             //keep track of target
             targetPosition.SetValue(transform.worldToLocalMatrix * target.position); //use local position
 
-        headAimRig.weight = Mathf.Clamp01(aim.GetValue(Time.deltaTime));
-        bodyAimRig.weight = Mathf.Clamp01(aim.GetValue(Time.deltaTime));
+        if(headAimRig != null)
+            headAimRig.weight = Mathf.Clamp01(aim.GetValue(Time.deltaTime));
+        if (bodyAimRig != null)
+            bodyAimRig.weight = Mathf.Clamp01(aim.GetValue(Time.deltaTime));
         transform.localPosition = targetPosition.GetValue(Time.deltaTime); //use local position
     }
 }

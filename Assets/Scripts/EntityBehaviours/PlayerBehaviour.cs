@@ -6,14 +6,15 @@ using UnityStandardAssets.Characters.ThirdPerson;
 
 public class PlayerBehaviour : MonoBehaviour
 {
-    [SerializeField] private NavMeshAgent playerNavMeshAgent;
+    [SerializeField] private NavMeshAgent playerNavMeshAgent = null;
     [SerializeField] private ThirdPersonMover mover;
 
     private IEntityAction activeAction;
 
     private void Start()
     {
-        playerNavMeshAgent.updateRotation = false;
+        if(playerNavMeshAgent != null)
+            playerNavMeshAgent.updateRotation = false;
 
         /*
          * TEMPORARY HACK 
