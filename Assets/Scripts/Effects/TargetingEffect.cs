@@ -9,6 +9,8 @@ public class TargetingEffect : MonoBehaviour
     private Rig headAimRig = null;
     [SerializeField]
     private Rig bodyAimRig = null;
+    [SerializeField]
+    private Vector3 lookAtOffset;
 
     private Transform target;
 
@@ -16,6 +18,7 @@ public class TargetingEffect : MonoBehaviour
     private LerpedVector targetPosition = new LerpedVector(1f, Vector3.zero);
 
     private Vector3 defaultLocalPosition;
+    private bool isLocked = false;
 
     private void Start()
     {
@@ -26,27 +29,42 @@ public class TargetingEffect : MonoBehaviour
     {
         target = toTarget;
 
-        //use local position
-        targetPosition.SetValue(transform.worldToLocalMatrix * target.position);
+        targetPosition.SetValue(target.position);
         aim.SetValue(1f);
+
+        isLocked = true;
     }
 
     public void UnlockTarget()
     {
-        targetPosition.SetValue(defaultLocalPosition);
+        target = null;
+
+        targetPosition.SetValue(transform.parent.TransformPoint(defaultLocalPosition));
         aim.SetValue(0f);
+
+        isLocked = false;
     }
 
     private void Update()
     {
-        if(target != null)
+        if (target != null)
             //keep track of target
-            targetPosition.SetValue(transform.worldToLocalMatrix * target.position); //use local position
+            targetPosition.SetValue(target.position);
 
-        if(headAimRig != null)
+        if (headAimRig != null)
             headAimRig.weight = Mathf.Clamp01(aim.GetValue(Time.deltaTime));
         if (bodyAimRig != null)
             bodyAimRig.weight = Mathf.Clamp01(aim.GetValue(Time.deltaTime));
-        transform.localPosition = targetPosition.GetValue(Time.deltaTime); //use local position
+
+        if (isLocked)
+        {
+            transform.position = targetPosition.GetValue(Time.deltaTime) + lookAtOffset;
+        }
+        else //free to reset aim position to forward
+        {
+            //keep track of in front of me
+            targetPosition.SetValue(transform.parent.TransformPoint(defaultLocalPosition));
+            transform.position = targetPosition.GetValue(Time.deltaTime);
+        }
     }
 }

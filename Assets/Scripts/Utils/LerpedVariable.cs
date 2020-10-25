@@ -21,4 +21,9 @@ public abstract class LerpedVariable<T>
     {
         time = newTime;
     }
+    public void HardSetValue(T newValue)
+    {
+        targetValue = newValue;
+        value = newValue;
+    }
 }

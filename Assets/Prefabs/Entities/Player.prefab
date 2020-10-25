@@ -107,7 +107,7 @@ MonoBehaviour:
       m_Length: 1
       m_Item0:
         transform: {fileID: 2068215213}
-        weight: 0.5
+        weight: 0.55
       m_Item1:
         transform: {fileID: 0}
         weight: 0
@@ -130,8 +130,8 @@ MonoBehaviour:
         transform: {fileID: 0}
         weight: 0
     m_Offset: {x: 0, y: 0, z: 0}
-    m_MinLimit: -20
-    m_MaxLimit: 20
+    m_MinLimit: -25
+    m_MaxLimit: 25
     m_AimAxis: 4
     m_UpAxis: 2
     m_WorldUpType: 0
@@ -554,8 +554,8 @@ MonoBehaviour:
         transform: {fileID: 0}
         weight: 0
     m_Offset: {x: 0, y: 0, z: 0}
-    m_MinLimit: -90
-    m_MaxLimit: 90
+    m_MinLimit: -55
+    m_MaxLimit: 55
     m_AimAxis: 4
     m_UpAxis: 2
     m_WorldUpType: 1
@@ -980,6 +980,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   headAimRig: {fileID: 172172130}
   bodyAimRig: {fileID: 1975019682}
+  lookAtOffset: {x: 0, y: 1.5, z: 0}
 --- !u!1 &1378773884023292221
 GameObject:
   m_ObjectHideFlags: 0
