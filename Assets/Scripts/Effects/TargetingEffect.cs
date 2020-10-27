@@ -10,7 +10,7 @@ public class TargetingEffect : MonoBehaviour
     [SerializeField]
     private Rig bodyAimRig = null;
     [SerializeField]
-    private Vector3 lookAtOffset;
+    private Vector3 lookAtOffset = Vector3.zero;
 
     private Transform target;
 

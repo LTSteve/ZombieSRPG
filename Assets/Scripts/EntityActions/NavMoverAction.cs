@@ -12,6 +12,10 @@ public class NavMoverAction : IEntityAction
 
     private float stopDistance = 0f;
 
+    //HACK: two frames of buffer before checking stopping distance
+    //this needs to be here to give Nav time to update with the new path
+    private int safezone = 2; 
+
     public NavMoverAction(Vector3 destination, IEntity toMove, float stopDistance = 0f)
     {
         this.destination = destination;
@@ -43,6 +47,7 @@ public class NavMoverAction : IEntityAction
 
     public void Update()
     {
+        safezone--;
         if (!validSetup) return;
 
         _updateDestination();
@@ -67,6 +72,7 @@ public class NavMoverAction : IEntityAction
 
     private bool _withinStoppingDistance()
     {
+        if (safezone > 0) return false;
         return navMeshAgent.remainingDistance <= (navMeshAgent.stoppingDistance + stopDistance);
     }
 }

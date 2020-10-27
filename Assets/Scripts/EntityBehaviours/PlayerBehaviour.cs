@@ -59,4 +59,9 @@ public class PlayerBehaviour : MonoBehaviour, IEntity
     {
         return mover;
     }
+
+    public Transform GetWeaponHolder()
+    {
+        return transform.Find("Rig/WeaponHolder/WeaponPivot");
+    }
 }

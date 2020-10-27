@@ -28,7 +28,7 @@ public class CommandController : MonoBehaviour
 
         var clickRay = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        if (Physics.Raycast(clickRay, out var hit, LayerMask.GetMask(new string[] { "Entities", "Default" })))
+        if (Physics.Raycast(clickRay, out var hit))
         {
             foreach(var selected in Selected)
             {

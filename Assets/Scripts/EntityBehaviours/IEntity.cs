@@ -8,4 +8,5 @@ public interface IEntity
     NavMeshAgent GetNavMeshAgent();
     ThirdPersonMover GetMover();
     void AssignNewAction(IEntityAction newAction);
+    Transform GetWeaponHolder();
 }

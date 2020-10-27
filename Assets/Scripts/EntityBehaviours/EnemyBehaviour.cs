@@ -55,6 +55,11 @@ public class EnemyBehaviour : MonoBehaviour, IEntity
         return null;
     }
 
+    public Transform GetWeaponHolder()
+    {
+        return transform.Find("Rig/WeaponHolder");
+    }
+
     private void _checkForNextMove()
     {
         if (enemyNavMeshAgent.hasPath)

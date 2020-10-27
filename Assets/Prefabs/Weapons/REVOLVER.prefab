@@ -10,6 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 5069439786241465208}
   - component: {fileID: 355575429180027798}
+  - component: {fileID: 995687460}
+  - component: {fileID: 995687462}
+  - component: {fileID: 995687461}
+  - component: {fileID: 995687464}
   m_Layer: 13
   m_Name: REVOLVER
   m_TagString: Untagged
@@ -24,9 +28,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8976702495394722688}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.088, z: 0.806}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 878775231670667344}
   m_Father: {fileID: 0}
@@ -45,6 +49,60 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.1, y: 0.2, z: 0.3}
   m_Center: {x: 0, y: 0, z: 0.1}
+--- !u!54 &995687460
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8976702495394722688}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!135 &995687462
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8976702495394722688}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.25
+  m_Center: {x: 0, y: 0, z: 0.3}
+--- !u!114 &995687461
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8976702495394722688}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2abeb01a103767d428ca158da1f41ae5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &995687464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8976702495394722688}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42694512028c95948b9d9c86a5a98fe0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactionRadius: 0.5
 --- !u!1001 &878775231670538960
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -62,15 +120,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 723c58db443fbaa4a9fc81bbf9c509eb, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 723c58db443fbaa4a9fc81bbf9c509eb, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.08900002
+      value: -0.089
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 723c58db443fbaa4a9fc81bbf9c509eb, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.006000012
+      value: 0.174
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 723c58db443fbaa4a9fc81bbf9c509eb, type: 3}
       propertyPath: m_LocalRotation.x
