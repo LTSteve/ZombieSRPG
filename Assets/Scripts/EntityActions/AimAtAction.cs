@@ -12,7 +12,7 @@ public class AimAtAction : IEntityAction
 
     private Vector3 repositionTo = Vector3.zero;
 
-    public AimAtAction(Transform toLookAt, IEntity targeter, bool aimWeapon = false)
+    public AimAtAction(Transform toLookAt, IEntity targeter, bool aimWeapon = false, float overshootSeconds = 0f)
     {
         this.targeter = targeter?.GetTransform();
         aimRepositionAngle = targeter == null ? -1 : targeter.GetAimRepositionAngle();
@@ -27,6 +27,11 @@ public class AimAtAction : IEntityAction
         }
     }
 
+    public void UpdateOvershootSeconds(float seconds)
+    {
+        target?.UpdateOvershootSeconds(seconds);
+    }
+
     public void Abort()
     {
         target?.UnlockTarget();
@@ -35,6 +40,11 @@ public class AimAtAction : IEntityAction
     public bool IsDone()
     {
         return false;
+    }
+
+    public bool IsFullyAimed()
+    {
+        return target.IsFullyAimed();
     }
 
     public void Update()

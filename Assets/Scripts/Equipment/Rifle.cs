@@ -6,5 +6,9 @@ public class Rifle : AbstractWeapon
     {
         base.Start();
     }
+    public override void Shoot()
+    {
+        base.Shoot();
+    }
 
 }

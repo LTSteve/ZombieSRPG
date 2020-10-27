@@ -11,12 +11,28 @@ public class LerpedVector : LerpedVariable<Vector3>
         {
             value = targetValue;
         }
-        if (deltaT == 0 || time == 0) return value;
+        if (deltaT == 0 || time == 0 || value == targetValue) return value;
 
         var transitionPercent = deltaT / time;
 
-        value = (1f - transitionPercent) * value + transitionPercent * targetValue;
+        var distancePerTick = (targetValue - previousValue) * transitionPercent;
+
+        var remainingDistance = targetValue - value;
+
+        if (_isSmaller(remainingDistance, distancePerTick))
+        {
+            value = targetValue;
+        }
+        else
+        {
+            value += distancePerTick;
+        }
 
         return value;
+    }
+
+    private bool _isSmaller(Vector3 d1, Vector3 d2)
+    {
+        return d1.magnitude < d2.magnitude;
     }
 }

@@ -55,7 +55,7 @@ public class CommandController : MonoBehaviour
                 {
                     if(entity != selected)
                     {
-                        selected.AssignNewAction(new AimAtAction(hit.transform, selected, true));
+                        selected.AssignNewAction(new AimAndShootAction(hit.transform, selected, selected.GetWeaponHolder().GetComponentInChildren<IWeapon>()));
                     }
                 }
                 else //ground

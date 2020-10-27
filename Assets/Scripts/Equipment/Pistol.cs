@@ -7,4 +7,8 @@ public class Pistol : AbstractWeapon
         base.Start();
     }
 
+    public override void Shoot()
+    {
+        base.Shoot();
+    }
 }

@@ -1,4 +1,6 @@
 ﻿
+using UnityEngine;
+
 public class LerpedFloat : LerpedVariable<float>
 {
     public LerpedFloat(float transitionTime = 1f, float initialValue = 0f, float initialTargetValue = 0f) : base(transitionTime, initialValue, initialTargetValue)
@@ -10,12 +12,28 @@ public class LerpedFloat : LerpedVariable<float>
         {
             value = targetValue;
         }
-        if (deltaT == 0 || time == 0) return value;
+        if (deltaT == 0 || time == 0 || value == targetValue) return value;
 
         var transitionPercent = deltaT / time;
 
-        value = (1f - transitionPercent) * value + transitionPercent * targetValue;
+        var distancePerTick = (targetValue - previousValue) * transitionPercent;
+
+        var remainingDistance = targetValue - value;
+
+        if (_isSmaller(remainingDistance, distancePerTick))
+        {
+            value = targetValue;
+        }
+        else
+        {
+            value += distancePerTick;
+        }
 
         return value;
+    }
+
+    private bool _isSmaller(float d1, float d2)
+    {
+        return Mathf.Abs(d1) < Mathf.Abs(d2);
     }
 }
