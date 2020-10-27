@@ -9,4 +9,7 @@ public interface IEntity
     ThirdPersonMover GetMover();
     void AssignNewAction(IEntityAction newAction);
     Transform GetWeaponHolder();
+    float GetAimRepositionAngle();
+    float GetAimAngleLimit();
+    Transform GetTransform();
 }

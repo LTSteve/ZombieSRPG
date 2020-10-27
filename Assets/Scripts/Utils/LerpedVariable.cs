@@ -26,4 +26,9 @@ public abstract class LerpedVariable<T>
         targetValue = newValue;
         value = newValue;
     }
+
+    public override string ToString()
+    {
+        return value.ToString() + "(" + targetValue.ToString() + ")";
+    }
 }

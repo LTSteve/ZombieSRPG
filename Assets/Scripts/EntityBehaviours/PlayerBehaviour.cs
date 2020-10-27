@@ -8,6 +8,11 @@ using UnityStandardAssets.Characters.ThirdPerson;
 [RequireComponent(typeof(ThirdPersonMover))]
 public class PlayerBehaviour : MonoBehaviour, IEntity
 {
+    [SerializeField]
+    private float aimRepositionAngle = -1f;
+    [SerializeField]
+    private float angleLimit = -1f;
+
     private NavMeshAgent playerNavMeshAgent = null;
     private ThirdPersonMover mover;
 
@@ -63,5 +68,20 @@ public class PlayerBehaviour : MonoBehaviour, IEntity
     public Transform GetWeaponHolder()
     {
         return transform.Find("Rig/WeaponHolder/WeaponPivot");
+    }
+
+    public float GetAimRepositionAngle()
+    {
+        return aimRepositionAngle;
+    }
+
+    public float GetAimAngleLimit()
+    {
+        return angleLimit;
+    }
+
+    public Transform GetTransform()
+    {
+        return transform;
     }
 }

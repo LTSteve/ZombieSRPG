@@ -49,8 +49,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4ebb5c05587ca447a19a58fc97bd76a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnemyNavMeshAgent: {fileID: 8558050974261935254}
-  Character: {fileID: -4190769745615981218}
+  aimRepositionAngle: 45
+  angleLimit: 80
 --- !u!195 &8558050974261935254
 NavMeshAgent:
   m_ObjectHideFlags: 0

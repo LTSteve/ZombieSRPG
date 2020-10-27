@@ -19,13 +19,14 @@ public class ThirdPersonMover : MonoBehaviour
 	bool m_IsGrounded;
 	float m_OrigGroundCheckDistance;
 	const float k_Half = 0.5f;
-	float m_TurnAmount;
+	float m_TurnAmount = 0f;
 	float m_ForwardAmount;
 	Vector3 m_GroundNormal;
 	float m_CapsuleHeight;
 	Vector3 m_CapsuleCenter;
 	CapsuleCollider m_Capsule;
 	bool m_Crouching;
+	bool m_IsTurning;
 
 
 	void Start()
@@ -40,7 +41,17 @@ public class ThirdPersonMover : MonoBehaviour
 		m_OrigGroundCheckDistance = m_GroundCheckDistance;
 	}
 
-	private Vector3 move;
+	private Vector3 move = Vector3.zero;
+	private bool crouch = false;
+	private bool jump = false;
+
+	public void AlignTo(Vector3 direction)
+    {
+		direction = transform.InverseTransformDirection(direction);
+		m_TurnAmount = Mathf.Atan2(direction.x, direction.z);
+
+		m_IsTurning = true;
+	}
 
 	public void Move(Vector3 move, bool crouch, bool jump)
 	{
@@ -49,11 +60,20 @@ public class ThirdPersonMover : MonoBehaviour
 		// direction.
 		if (move.magnitude > 1f) move.Normalize();
 		move = transform.InverseTransformDirection(move);
-		CheckGroundStatus();
 		move = Vector3.ProjectOnPlane(move, m_GroundNormal);
 		m_TurnAmount = Mathf.Atan2(move.x, move.z);
 		m_ForwardAmount = move.z;
 
+		m_IsTurning = false;
+		this.move = move;
+		this.crouch = crouch;
+		this.jump = jump;
+
+	}
+
+    private void Update()
+	{
+		CheckGroundStatus();
 		ApplyExtraTurnRotation();
 
 		// control and velocity handling is different when grounded and airborne:
@@ -70,12 +90,6 @@ public class ThirdPersonMover : MonoBehaviour
 		//PreventStandingInLowHeadroom();
 
 		// send input and other state parameters to the animator
-		//UpdateAnimator(move);
-		this.move = move;
-	}
-
-    private void Update()
-	{
 		UpdateAnimator(move);
 	}
 
@@ -145,7 +159,7 @@ public class ThirdPersonMover : MonoBehaviour
 
 		// the anim speed multiplier allows the overall speed of walking/running to be tweaked in the inspector,
 		// which affects the movement speed because of the root motion.
-		if (m_IsGrounded && move.magnitude > 0)
+		if (m_IsGrounded && move.magnitude > 0 && !m_IsTurning)
 		{
 			m_Animator.speed = m_AnimSpeedMultiplier;
 		}

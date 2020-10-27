@@ -55,7 +55,7 @@ public class CommandController : MonoBehaviour
                 {
                     if(entity != selected)
                     {
-                        selected.AssignNewAction(new LookAtAction(hit.transform, selected.GetTargeting()));
+                        selected.AssignNewAction(new AimAtAction(hit.transform, selected, true));
                     }
                 }
                 else //ground

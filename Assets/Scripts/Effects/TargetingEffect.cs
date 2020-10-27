@@ -10,6 +10,10 @@ public class TargetingEffect : MonoBehaviour
     [SerializeField]
     private Rig bodyAimRig = null;
     [SerializeField]
+    private Rig weaponAimRig = null;
+    [SerializeField]
+    private Rig weaponIdleRig = null;
+    [SerializeField]
     private Vector3 lookAtOffset = Vector3.zero;
 
     private Transform target;
@@ -19,13 +23,14 @@ public class TargetingEffect : MonoBehaviour
 
     private Vector3 defaultLocalPosition;
     private bool isLocked = false;
+    private bool aimingWeapon = false;
 
     private void Start()
     {
         defaultLocalPosition = transform.localPosition;
     }
 
-    public void LockTarget(Transform toTarget)
+    public void LockTarget(Transform toTarget, bool aimWeapon = false)
     {
         target = toTarget;
 
@@ -33,6 +38,7 @@ public class TargetingEffect : MonoBehaviour
         aim.SetValue(1f);
 
         isLocked = true;
+        aimingWeapon = aimWeapon;
     }
 
     public void UnlockTarget()
@@ -43,6 +49,7 @@ public class TargetingEffect : MonoBehaviour
         aim.SetValue(0f);
 
         isLocked = false;
+        aimingWeapon = false;
     }
 
     private void Update()
@@ -55,6 +62,20 @@ public class TargetingEffect : MonoBehaviour
             headAimRig.weight = Mathf.Clamp01(aim.GetValue(Time.deltaTime));
         if (bodyAimRig != null)
             bodyAimRig.weight = Mathf.Clamp01(aim.GetValue(Time.deltaTime));
+        if (weaponAimRig != null)
+        {
+            if (aimingWeapon)
+                weaponAimRig.weight = Mathf.Clamp01(aim.GetValue(Time.deltaTime));
+            else
+                weaponAimRig.weight = Mathf.Clamp01(weaponAimRig.weight - Time.deltaTime);
+        }
+        if (weaponIdleRig != null)
+        {
+            if (aimingWeapon)
+                weaponIdleRig.weight = Mathf.Clamp01(1f - aim.GetValue(Time.deltaTime));
+            else
+                weaponIdleRig.weight = Mathf.Clamp01(weaponIdleRig.weight + Time.deltaTime);
+        }
 
         if (isLocked)
         {

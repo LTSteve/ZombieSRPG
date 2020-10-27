@@ -979,6 +979,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   headAimRig: {fileID: 172172130}
   bodyAimRig: {fileID: 1975019682}
+  weaponAimRig: {fileID: 990222383}
+  weaponIdleRig: {fileID: 1316628733}
   lookAtOffset: {x: 0, y: 1.5, z: 0}
 --- !u!1 &1378773884023292221
 GameObject:
@@ -1114,6 +1116,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30a615f53d3440d42a2c13669c266dbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  aimRepositionAngle: 45
+  angleLimit: 80
 --- !u!195 &3802906813424207928
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1124,7 +1128,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.25
-  m_Speed: 0.4
+  m_Speed: 0.5
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 100
@@ -1197,8 +1201,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c66312b6ff89444fb351ef28a0ffb88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MovingTurnSpeed: 360
-  m_StationaryTurnSpeed: 180
+  m_MovingTurnSpeed: 180
+  m_StationaryTurnSpeed: 100
   m_JumpPower: 6
   m_GravityMultiplier: 1
   m_RunCycleLegOffset: 0.2

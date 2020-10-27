@@ -8,6 +8,11 @@ using UnityStandardAssets.Characters.ThirdPerson;
 [RequireComponent(typeof(ThirdPersonMover))]
 public class EnemyBehaviour : MonoBehaviour, IEntity
 {
+    [SerializeField]
+    private float aimRepositionAngle = -1f;
+    [SerializeField]
+    private float angleLimit = -1f;
+
     private NavMeshAgent enemyNavMeshAgent;
     private ThirdPersonMover mover;
 
@@ -80,5 +85,20 @@ public class EnemyBehaviour : MonoBehaviour, IEntity
         {
             mover.Move(Vector3.zero, false, false);
         }
+    }
+
+    public float GetAimRepositionAngle()
+    {
+        return aimRepositionAngle;
+    }
+
+    public float GetAimAngleLimit()
+    {
+        return angleLimit;
+    }
+
+    public Transform GetTransform()
+    {
+        return transform;
     }
 }
