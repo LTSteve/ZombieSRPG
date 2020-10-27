@@ -12,17 +12,12 @@ public class CommandController : MonoBehaviour
     }
     #endregion
 
-    public static List<PlayerBehaviour> Selected = new List<PlayerBehaviour>();
+    public static List<IEntity> Selected = new List<IEntity>();
 
     void Update()
     {
         _checkForMouseClick();
     }
-
-
-    private Vector3 raycastStart;
-    private Vector3 raycastEnd;
-    private bool drawGizmos = false;
 
     private void _checkForMouseClick()
     {
@@ -37,26 +32,37 @@ public class CommandController : MonoBehaviour
         {
             foreach(var selected in Selected)
             {
-                if(hit.transform.gameObject.layer == 10)
+                var clickedOn = hit.transform;
+
+                var interactable = clickedOn.GetComponent<IInteractable>();
+                var entity = clickedOn.GetComponent<IEntity>();
+
+                if (interactable != null)
                 {
-                    selected.AssignNewAction(new LookAtAction(hit.transform, selected.transform.Find("Rig/AimTarget").GetComponent<TargetingEffect>()));
+                    var actionList = new EntityActionList();
+                    var interactionRadius = interactable.GetInteractionRadius();
+                    if (interactionRadius != -1) 
+                    {
+                        //close the distance first
+                        actionList.AddAction(new NavMoverAction(hit.point, selected, interactionRadius));
+                    }
+
+                    actionList.AddAction(new InteractAction(interactable, selected));
+
+                    selected.AssignNewAction(actionList);
                 }
-                else
+                else if(entity != null)
                 {
-                    selected.AssignNewAction(new NavMoverAction(hit.point, selected.transform));
+                    if(entity != selected)
+                    {
+                        selected.AssignNewAction(new LookAtAction(hit.transform, selected.GetTargeting()));
+                    }
                 }
-                drawGizmos = true;
-                raycastStart = Camera.main.transform.position;
-                raycastEnd = hit.point;
+                else //ground
+                {
+                    selected.AssignNewAction(new NavMoverAction(hit.point, selected));
+                }
             }
         }
-    }
-
-    private void OnDrawGizmos()
-    {
-        if (!drawGizmos) return;
-        Gizmos.color = Color.green;
-        Gizmos.DrawLine(raycastStart, raycastEnd);
-        Gizmos.DrawSphere(raycastEnd, 0.2f);
     }
 }

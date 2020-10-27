@@ -40,10 +40,10 @@ public class ThirdPersonMover : MonoBehaviour
 		m_OrigGroundCheckDistance = m_GroundCheckDistance;
 	}
 
+	private Vector3 move;
 
 	public void Move(Vector3 move, bool crouch, bool jump)
 	{
-
 		// convert the world relative moveInput vector into a local-relative
 		// turn amount and forward amount required to head in the desired
 		// direction.
@@ -70,11 +70,17 @@ public class ThirdPersonMover : MonoBehaviour
 		//PreventStandingInLowHeadroom();
 
 		// send input and other state parameters to the animator
+		//UpdateAnimator(move);
+		this.move = move;
+	}
+
+    private void Update()
+	{
 		UpdateAnimator(move);
 	}
 
 
-	void ScaleCapsuleForCrouching(bool crouch)
+    void ScaleCapsuleForCrouching(bool crouch)
 	{
 		if (m_IsGrounded && crouch)
 		{
@@ -119,10 +125,10 @@ public class ThirdPersonMover : MonoBehaviour
 		m_Animator.SetFloat("Forward", m_ForwardAmount, 0.1f, Time.deltaTime);
 		m_Animator.SetFloat("Turn", m_TurnAmount, 0.1f, Time.deltaTime);
 		m_Animator.SetBool("Crouch", m_Crouching);
-		m_Animator.SetBool("OnGround", m_IsGrounded);
+		m_Animator.SetBool("OnGround", true/*m_IsGrounded*/);
 		if (!m_IsGrounded)
 		{
-			m_Animator.SetFloat("Jump", m_Rigidbody.velocity.y);
+			//m_Animator.SetFloat("Jump", m_Rigidbody.velocity.y);
 		}
 
 		// calculate which leg is behind, so as to leave that leg trailing in the jump animation

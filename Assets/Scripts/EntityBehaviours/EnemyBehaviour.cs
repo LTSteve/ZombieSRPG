@@ -4,41 +4,76 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityStandardAssets.Characters.ThirdPerson;
 
-public class EnemyBehaviour : MonoBehaviour
+[RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent(typeof(ThirdPersonMover))]
+public class EnemyBehaviour : MonoBehaviour, IEntity
 {
-    public NavMeshAgent EnemyNavMeshAgent;
-    public ThirdPersonMover Character;
+    private NavMeshAgent enemyNavMeshAgent;
+    private ThirdPersonMover mover;
+
+    private IEntityAction activeAction;
 
     void Start()
     {
-        EnemyNavMeshAgent.updateRotation = false;
+        enemyNavMeshAgent = GetComponent<NavMeshAgent>();
+        mover = GetComponent<ThirdPersonMover>();
+
+        enemyNavMeshAgent.updateRotation = false;
     }
 
     void Update()
     {
+        //TODO: convert me to actions, likely with an AI controller that gives them out, much like the CommandController
         _checkForNextMove();
         _updateAnimation();
     }
 
+    public void AssignNewAction(IEntityAction newAction)
+    {
+        if (activeAction != null && !activeAction.IsDone()) activeAction.Abort();
+
+        activeAction = newAction;
+    }
+
+    public ThirdPersonMover GetMover()
+    {
+        return mover;
+    }
+
+    public NavMeshAgent GetNavMeshAgent()
+    {
+        return enemyNavMeshAgent;
+    }
+
+    public Vector3 GetPosition()
+    {
+        return transform.position;
+    }
+
+    public TargetingEffect GetTargeting()
+    {
+        return null;
+    }
+
     private void _checkForNextMove()
     {
-        if (EnemyNavMeshAgent.hasPath)
+        if (enemyNavMeshAgent.hasPath)
         {
             return;
         }
 
-        EnemyNavMeshAgent.SetDestination(transform.position + new Vector3(Random.value * 10f - 5f, 0, Random.value * 10f - 5f));
+        enemyNavMeshAgent.SetDestination(transform.position + new Vector3(Random.value * 10f - 5f, 0, Random.value * 10f - 5f));
     }
 
     private void _updateAnimation()
     {
-        if (EnemyNavMeshAgent.remainingDistance > EnemyNavMeshAgent.stoppingDistance)
+        if (enemyNavMeshAgent.remainingDistance > enemyNavMeshAgent.stoppingDistance)
         {
-            Character.Move(EnemyNavMeshAgent.desiredVelocity, false, false);
+            mover.Move(enemyNavMeshAgent.desiredVelocity, false, false);
         }
         else
         {
-            Character.Move(Vector3.zero, false, false);
+            mover.Move(Vector3.zero, false, false);
         }
     }
 }

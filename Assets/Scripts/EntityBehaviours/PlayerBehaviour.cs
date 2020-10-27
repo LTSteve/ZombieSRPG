@@ -4,17 +4,19 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityStandardAssets.Characters.ThirdPerson;
 
-public class PlayerBehaviour : MonoBehaviour
+[RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent(typeof(ThirdPersonMover))]
+public class PlayerBehaviour : MonoBehaviour, IEntity
 {
-    [SerializeField] private NavMeshAgent playerNavMeshAgent = null;
-    [SerializeField] private ThirdPersonMover mover;
+    private NavMeshAgent playerNavMeshAgent = null;
+    private ThirdPersonMover mover;
 
     private IEntityAction activeAction;
 
     private void Start()
     {
-        if(playerNavMeshAgent != null)
-            playerNavMeshAgent.updateRotation = false;
+        playerNavMeshAgent = GetComponent<NavMeshAgent>();
+        mover = GetComponent<ThirdPersonMover>();
 
         /*
          * TEMPORARY HACK 
@@ -36,5 +38,25 @@ public class PlayerBehaviour : MonoBehaviour
         if (activeAction != null && !activeAction.IsDone()) activeAction.Abort();
 
         activeAction = newAction;
+    }
+
+    public Vector3 GetPosition()
+    {
+        return transform.position;
+    }
+
+    public TargetingEffect GetTargeting()
+    {
+        return transform.Find("Rig/AimTarget").GetComponent<TargetingEffect>();
+    }
+
+    public NavMeshAgent GetNavMeshAgent()
+    {
+        return playerNavMeshAgent;
+    }
+
+    public ThirdPersonMover GetMover()
+    {
+        return mover;
     }
 }

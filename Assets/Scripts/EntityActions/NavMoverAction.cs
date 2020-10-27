@@ -4,32 +4,34 @@ using UnityEngine.AI;
 public class NavMoverAction : IEntityAction
 {
     private Vector3 destination;
-    private Transform toMove;
+    private IEntity toMove;
     private bool validSetup;
 
     private NavMeshAgent navMeshAgent;
     private ThirdPersonMover mover;
 
-    public NavMoverAction(Vector3 destination, Transform toMove)
-    {
-        if (toMove == null)
-        {
-            validSetup = false;
-            return;
-        }
+    private float stopDistance = 0f;
 
+    public NavMoverAction(Vector3 destination, IEntity toMove, float stopDistance = 0f)
+    {
         this.destination = destination;
         this.toMove = toMove;
+        this.stopDistance = stopDistance;
 
-        navMeshAgent = toMove.GetComponent<NavMeshAgent>();
-        mover = toMove.GetComponent<ThirdPersonMover>();
+        validSetup = toMove != null;
+        if (!validSetup) return;
 
-        validSetup = mover != null && navMeshAgent != null;
+        navMeshAgent = toMove.GetNavMeshAgent();
+        mover = toMove.GetMover();
+
+        validSetup = navMeshAgent != null;
     }
 
     public void Abort()
     {
-        destination = toMove.position;
+        destination = toMove.GetPosition();
+        navMeshAgent.SetDestination(destination);
+        mover.Move(Vector3.zero, false, false);
     }
 
     public bool IsDone()
@@ -46,7 +48,6 @@ public class NavMoverAction : IEntityAction
         _updateDestination();
         _updateCharacterAnimation();
     }
-
     private void _updateDestination()
     {
         navMeshAgent.SetDestination(destination);
@@ -66,6 +67,6 @@ public class NavMoverAction : IEntityAction
 
     private bool _withinStoppingDistance()
     {
-        return navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance;
+        return navMeshAgent.remainingDistance <= (navMeshAgent.stoppingDistance + stopDistance);
     }
 }
