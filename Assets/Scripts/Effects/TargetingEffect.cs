@@ -71,6 +71,11 @@ public class TargetingEffect : MonoBehaviour
 
     private void Update()
     {
+        if(target == null && isLocked)
+        {
+            UnlockTarget();
+        }
+
         if (target != null)
             //keep track of target
             targetPosition.SetValue(target.position + _predictTargetMovement());

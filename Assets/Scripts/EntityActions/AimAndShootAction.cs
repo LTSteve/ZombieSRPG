@@ -29,11 +29,13 @@ public class AimAndShootAction : IEntityAction
 
     public bool IsDone()
     {
-        return false;
+        return _targetIsDead();
     }
 
     public void Update()
     {
+        if (_targetIsDead()) return;
+
         aimAction.UpdateOvershootSeconds(Vector3.Distance(toShootAt.position,toShoot.GetTransform().position) / bulletSpeed);
 
         aimAction.Update();
@@ -45,5 +47,10 @@ public class AimAndShootAction : IEntityAction
             //call weapon shoot
             toShoot.Shoot();
         }
+    }
+
+    private bool _targetIsDead()
+    {
+        return toShootAt == null || toShootAt.gameObject == null;
     }
 }

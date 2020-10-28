@@ -32,12 +32,11 @@ public class BaseProjectile : MonoBehaviour, IProjectile
 
     private void OnTriggerEnter(Collider other)
     {
-        /*
-        if(other.GetComponent<IHealthHaver>() != null)
+        var healthHaver = other.GetComponent<IHealthHaver>();
+        if(healthHaver != null)
         {
-            other.GetComponent<IHealthHaver>().DealDamage(damage);
+            healthHaver.DealDamage(damage);
         }
-        */
 
         Destroy(gameObject);
     }
