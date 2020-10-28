@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
@@ -12,6 +12,12 @@ public class EntityRigStatemachine : MonoBehaviour
     private Rig weaponAimRig = null;
     [SerializeField]
     private Rig weaponIdleRig = null;
+
+    //Gun Kicks
+    [SerializeField]
+    private MultiAimConstraint gunKickAimConstraint = null;
+    [SerializeField]
+    private MultiPositionConstraint gunKickPositionConstraint = null;
 
     private LerpedFloat aimState = new LerpedFloat(0.5f, 0f);
     private bool aimingWeapon = false;
@@ -53,5 +59,63 @@ public class EntityRigStatemachine : MonoBehaviour
             else
                 weaponIdleRig.weight = Mathf.Clamp01(weaponIdleRig.weight + Time.deltaTime);
         }
+    }
+
+    private Coroutine pistonKickRoutine;
+    private Coroutine verticalKickRoutine;
+
+    public void Kick(GunData gunData)
+    {
+        if(gunData.KickType == GunData.GunKickType.None || gunData.Kick == 0)
+        {
+            return;
+        }
+
+        switch (gunData.KickType)
+        {
+            case GunData.GunKickType.Piston:
+                if (pistonKickRoutine != null) StopCoroutine(pistonKickRoutine);
+                pistonKickRoutine = StartCoroutine(_doPistonGunKick(gunData.Kick));
+                break;
+            case GunData.GunKickType.Vertical:
+                if (verticalKickRoutine != null) StopCoroutine(verticalKickRoutine);
+                verticalKickRoutine = StartCoroutine(_doVerticalGunKick(gunData.Kick));
+                break;
+        }
+    }
+
+    private IEnumerator _doPistonGunKick(float kick)
+    {
+        if (gunKickPositionConstraint != null)
+        {
+            gunKickPositionConstraint.weight = kick;
+
+            for (var i = 0; i < 100 && gunKickPositionConstraint.weight != 0f; i++)
+            {
+                yield return null;
+
+                gunKickPositionConstraint.weight = gunKickPositionConstraint.weight * 0.9f;
+            }
+        }
+
+        gunKickPositionConstraint.weight = 0f;
+        pistonKickRoutine = null;
+    }
+    private IEnumerator _doVerticalGunKick(float kick)
+    {
+        if(gunKickAimConstraint != null)
+        {
+            gunKickAimConstraint.weight = kick;
+
+            for (var i = 0; i < 1000 && gunKickAimConstraint.weight != 0f; i++)
+            {
+                yield return null;
+
+                gunKickAimConstraint.weight = gunKickAimConstraint.weight * 0.9f;
+            }
+        }
+
+        gunKickAimConstraint.weight = 0f;
+        verticalKickRoutine = null;
     }
 }

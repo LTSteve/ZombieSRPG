@@ -101,4 +101,9 @@ public class EnemyEntity : MonoBehaviour, IEntity
     {
         return transform;
     }
+
+    public EntityRigStatemachine GetRigStatemachine()
+    {
+        return null;
+    }
 }

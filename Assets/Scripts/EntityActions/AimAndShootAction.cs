@@ -6,6 +6,9 @@ public class AimAndShootAction : IEntityAction
     //manage target redicle
     private TargetingEffect targetingRedicle;
 
+    //read rig state
+    private EntityRigStatemachine entityRigStatemachine;
+
     //manage rotation
     private KeepAlignedAction keepAligned;
 
@@ -17,6 +20,7 @@ public class AimAndShootAction : IEntityAction
     public AimAndShootAction(Transform targetToShootAt, IEntity entityHoldingWeapon, IWeapon weaponToShoot)
     {
         targetingRedicle = entityHoldingWeapon?.GetTargeting();
+        entityRigStatemachine = entityHoldingWeapon?.GetRigStatemachine();
 
         if (targetingRedicle != null)
             keepAligned = new KeepAlignedAction(entityHoldingWeapon, targetingRedicle.transform);
@@ -45,10 +49,13 @@ public class AimAndShootAction : IEntityAction
         keepAligned.Update();
 
         //aiming complete & not adjusting rotation
-        if (targetingRedicle.IsFullyAimed() && keepAligned.IsWithinOuterLimit())
+        if (entityRigStatemachine.IsFullyAimed() && keepAligned.IsWithinOuterLimit())
         {
             //call weapon shoot
-            weaponToShoot.Shoot();
+            var shot = weaponToShoot.Shoot();
+
+            if (shot && weaponToShoot is Gun)
+                entityRigStatemachine.Kick(((Gun)weaponToShoot).GunData);
         }
     }
 }

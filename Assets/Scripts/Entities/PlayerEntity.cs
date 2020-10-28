@@ -84,4 +84,9 @@ public class PlayerEntity : MonoBehaviour, IEntity
     {
         return transform;
     }
+
+    public EntityRigStatemachine GetRigStatemachine()
+    {
+        return GetComponentInChildren<EntityRigStatemachine>();
+    }
 }

@@ -12,4 +12,5 @@ public interface IEntity
     float GetAimRepositionAngle();
     float GetAimAngleLimit();
     Transform GetTransform();
+    EntityRigStatemachine GetRigStatemachine();
 }

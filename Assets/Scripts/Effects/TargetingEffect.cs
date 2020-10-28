@@ -51,11 +51,6 @@ public class TargetingEffect : MonoBehaviour
         isLocked = false;
     }
 
-    public bool IsFullyAimed()
-    {
-        return rigs.IsFullyAimed();
-    }
-
     public bool TargetIsDead()
     {
         return target == null || target.gameObject == null;

@@ -20,3 +20,5 @@ MonoBehaviour:
   BurstCooldown: 0.85
   BulletPrefab: {fileID: 4041346390090492577, guid: aef9bd21972d7bd46a348d8b367a1c8c,
     type: 3}
+  Kick: 0.8
+  KickType: 1

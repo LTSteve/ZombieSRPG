@@ -10,7 +10,7 @@ public class Gun : MonoBehaviour, IWeapon
     public static float BULLETSPEED = 700f;
 
     [SerializeField]
-    protected GunData GunData;
+    public GunData GunData;
     [SerializeField]
     protected Transform bulletSpawnPoint;
 
@@ -52,14 +52,14 @@ public class Gun : MonoBehaviour, IWeapon
         body.constraints = 0;
     }
 
-    public virtual void Shoot()
+    public virtual bool Shoot()
     {
-        if (GunData == null || GunData.BulletPrefab == null) return;
+        if (GunData == null || GunData.BulletPrefab == null) return false;
 
-        if (!_updateBurstState()) return;
+        if (!_updateBurstState()) return false;
         //burst is active
 
-        _updateShootState();
+        return _updateShootState();
     }
 
     private bool _updateBurstState()
@@ -80,7 +80,7 @@ public class Gun : MonoBehaviour, IWeapon
         return true;
     }
 
-    private void _updateShootState()
+    private bool _updateShootState()
     {
         var shotTime = GunData.Rate == 0f ? Time.deltaTime : (1f / GunData.Rate);
 
@@ -91,7 +91,10 @@ public class Gun : MonoBehaviour, IWeapon
             timeSinceLastBullet = 0f;
             burstState++;
             _generateBullet();
+            return true;
         }
+
+        return false;
     }
 
     private void _generateBullet()
