@@ -20,7 +20,10 @@ public class BaseHealthHaver : MonoBehaviour, IHealthHaver
         health -= damage;
         if(health <= 0f)
         {
-            Die();
+            if (gameObject.name == "Player")
+                health = maxHealth;
+            else
+                Die();
         }
     }
 

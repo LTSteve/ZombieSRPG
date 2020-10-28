@@ -13,7 +13,7 @@ public class TileGenerator : MonoBehaviour
 
     private List<Vector2Int> wallLocations;
 
-    public void GenerateEnemies(EnemyBehaviour EnemyPrefab, PlayerBehaviour PlayerPrefab, bool playerToo)
+    public void GenerateEnemies(EnemyEntity EnemyPrefab, PlayerEntity PlayerPrefab, bool playerToo)
     {
         var spaces = TileWidth * TileHeight;
         var wallSpaces = (int)(spaces * WallSpaceRate);

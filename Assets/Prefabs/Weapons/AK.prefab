@@ -42,8 +42,8 @@ GameObject:
   - component: {fileID: 7443080998410062754}
   - component: {fileID: 2790217071411780929}
   - component: {fileID: 5915417860290234563}
-  - component: {fileID: 359203868800824072}
   - component: {fileID: 2114511873428654368}
+  - component: {fileID: 2047309991852293798}
   m_Layer: 13
   m_Name: AK
   m_TagString: Untagged
@@ -109,25 +109,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &359203868800824072
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7947447813233119864}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba54eb115c9fda84db1db94451ce71e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bullet: {fileID: 4041346390090492577, guid: aef9bd21972d7bd46a348d8b367a1c8c, type: 3}
-  bulletSpawnPoint: {fileID: 3654645901914067998}
-  bulletSpeed: 0.2
-  bulletBurst: 4
-  burstBulletsPerSecond: 10
-  burstCooldown: 0.68
-  damage: 9
 --- !u!114 &2114511873428654368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -141,6 +122,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactionRadius: 0.5
+--- !u!114 &2047309991852293798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7947447813233119864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37320541934920b4ea2b1ba15bb40498, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GunData: {fileID: 11400000, guid: d6997ed6193874f439ee889a9326edab, type: 2}
+  bulletSpawnPoint: {fileID: 3654645901914067998}
 --- !u!1001 &7947447812143862514
 PrefabInstance:
   m_ObjectHideFlags: 0

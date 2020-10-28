@@ -7,50 +7,38 @@ using UnityEngine.Animations.Rigging;
 public class TargetingEffect : MonoBehaviour
 {
     [SerializeField]
-    private Rig headAimRig = null;
-    [SerializeField]
-    private Rig bodyAimRig = null;
-    [SerializeField]
-    private Rig weaponAimRig = null;
-    [SerializeField]
-    private Rig weaponIdleRig = null;
+    private EntityRigStatemachine rigs = null;
     [SerializeField]
     private Vector3 lookAtOffset = Vector3.zero;
 
+    private IEntity parentEntity = null;
+
     private Transform target;
 
-    private LerpedFloat aim = new LerpedFloat(0.5f, 0f);
     private LerpedVector targetPosition = new LerpedVector(0.25f, Vector3.zero);
 
     private Vector3 defaultLocalPosition;
     private bool isLocked = false;
-    private bool aimingWeapon = false;
 
-    private float overshootSeconds = 0f;
     private Vector3 currentMovementPrediction = Vector3.zero;
     private Vector3 previousTargetLocation = Vector3.zero;
+    private float bulletSpeed = 0f;
 
     private void Start()
     {
         defaultLocalPosition = transform.localPosition;
+        parentEntity = gameObject.GetComponentInParent<IEntity>();
     }
 
-    public void UpdateOvershootSeconds(float seconds)
-    {
-        overshootSeconds = seconds;
-    }
-
-    public void LockTarget(Transform toTarget, bool aimWeapon = false, float overshootSeconds = 0f)
+    public void LockTarget(Transform toTarget, bool aimWeapon = false, float bulletSpeed = 0f)
     {
         target = toTarget;
-        previousTargetLocation = target.position;
+        this.bulletSpeed = bulletSpeed;
 
         targetPosition.SetValue(target.position);
-        aim.SetValue(1f);
+        rigs.Aiming(aimWeapon);
 
         isLocked = true;
-        aimingWeapon = aimWeapon;
-        this.overshootSeconds = overshootSeconds;
     }
 
     public void UnlockTarget()
@@ -58,20 +46,24 @@ public class TargetingEffect : MonoBehaviour
         target = null;
 
         targetPosition.SetValue(transform.parent.TransformPoint(defaultLocalPosition));
-        aim.SetValue(0f);
+        rigs.Holding();
 
         isLocked = false;
-        aimingWeapon = false;
     }
 
     public bool IsFullyAimed()
     {
-        return aim.GetValue() == 1f;
+        return rigs.IsFullyAimed();
+    }
+
+    public bool TargetIsDead()
+    {
+        return target == null || target.gameObject == null;
     }
 
     private void Update()
     {
-        if(target == null && isLocked)
+        if(TargetIsDead() && isLocked)
         {
             UnlockTarget();
         }
@@ -79,8 +71,6 @@ public class TargetingEffect : MonoBehaviour
         if (target != null)
             //keep track of target
             targetPosition.SetValue(target.position + _predictTargetMovement());
-
-        _updateAnimationRigs();
 
         if (isLocked)
         {
@@ -94,33 +84,16 @@ public class TargetingEffect : MonoBehaviour
         }
     }
 
-    private void _updateAnimationRigs()
-    {
-        if (headAimRig != null)
-            headAimRig.weight = Mathf.Clamp01(aim.GetValue(Time.deltaTime));
-        if (bodyAimRig != null)
-            bodyAimRig.weight = Mathf.Clamp01(aim.GetValue(Time.deltaTime));
-        if (weaponAimRig != null)
-        {
-            if (aimingWeapon)
-                weaponAimRig.weight = Mathf.Clamp01(aim.GetValue(Time.deltaTime));
-            else
-                weaponAimRig.weight = Mathf.Clamp01(weaponAimRig.weight - Time.deltaTime);
-        }
-        if (weaponIdleRig != null)
-        {
-            if (aimingWeapon)
-                weaponIdleRig.weight = Mathf.Clamp01(1f - aim.GetValue(Time.deltaTime));
-            else
-                weaponIdleRig.weight = Mathf.Clamp01(weaponIdleRig.weight + Time.deltaTime);
-        }
-    }
-
     private Vector3 _predictTargetMovement()
     {
+        //No tracking needed
+        if (bulletSpeed == 0f || parentEntity == null) return Vector3.zero;
+
+        var overshootSeconds = Vector3.Distance(target.position, parentEntity.GetPosition()) / bulletSpeed;
+
         var nextMovementPrediction = (target.position - previousTargetLocation) * (overshootSeconds / Time.deltaTime);
 
-        currentMovementPrediction = currentMovementPrediction * (0.9f) + nextMovementPrediction * (0.1f);
+        currentMovementPrediction = currentMovementPrediction * (0.5f) + nextMovementPrediction * (0.5f);
 
         previousTargetLocation = target.position;
 

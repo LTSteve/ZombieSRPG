@@ -3,26 +3,16 @@
 [RequireComponent(typeof(BoxCollider))]
 [RequireComponent(typeof(SphereCollider))]
 [RequireComponent(typeof(Rigidbody))]
-public abstract class AbstractWeapon : MonoBehaviour, IWeapon
+public class Gun : MonoBehaviour, IWeapon
 {
     //a base speed for bullets, measured in units/sec
     //roughly equivalent to 700 m/s
     public static float BULLETSPEED = 700f;
 
     [SerializeField]
-    protected Transform bullet;
+    protected GunData GunData;
     [SerializeField]
     protected Transform bulletSpawnPoint;
-    [SerializeField]
-    protected float bulletSpeed;
-    [SerializeField]
-    protected float bulletBurst;
-    [SerializeField]
-    protected float burstBulletsPerSecond;
-    [SerializeField]
-    protected float burstCooldown;
-    [SerializeField]
-    protected float damage;
 
     protected float timeSinceLastBullet;
     protected float timeSinceLastBurst;
@@ -64,7 +54,7 @@ public abstract class AbstractWeapon : MonoBehaviour, IWeapon
 
     public virtual void Shoot()
     {
-        if (bullet == null) return;
+        if (GunData == null || GunData.BulletPrefab == null) return;
 
         if (!_updateBurstState()) return;
         //burst is active
@@ -74,11 +64,11 @@ public abstract class AbstractWeapon : MonoBehaviour, IWeapon
 
     private bool _updateBurstState()
     {
-        if (burstState >= bulletBurst)//in between bursts
+        if (burstState >= GunData.BulletsPerBurst)//in between bursts
         {
             timeSinceLastBurst += Time.deltaTime;
 
-            if (timeSinceLastBurst > burstCooldown)
+            if (timeSinceLastBurst > GunData.BurstCooldown)
             {
                 timeSinceLastBurst = 0f;
                 burstState = 0;
@@ -92,7 +82,7 @@ public abstract class AbstractWeapon : MonoBehaviour, IWeapon
 
     private void _updateShootState()
     {
-        var shotTime = burstBulletsPerSecond == 0f ? Time.deltaTime : (1f / burstBulletsPerSecond);
+        var shotTime = GunData.Rate == 0f ? Time.deltaTime : (1f / GunData.Rate);
 
         timeSinceLastBullet += Time.deltaTime;
 
@@ -106,13 +96,13 @@ public abstract class AbstractWeapon : MonoBehaviour, IWeapon
 
     private void _generateBullet()
     {
-        var newBullet = Instantiate(bullet, bulletSpawnPoint.position, bulletSpawnPoint.rotation).GetComponent<IProjectile>();
+        var newBullet = Instantiate(GunData.BulletPrefab, bulletSpawnPoint.position, bulletSpawnPoint.rotation).GetComponent<IProjectile>();
 
-        newBullet.Launch(transform.forward, GetBulletTravelSpeed(), damage);
+        newBullet.Launch(transform.forward, GetBulletTravelSpeed(), GunData.Damage);
     }
 
     public float GetBulletTravelSpeed()
     {
-        return BULLETSPEED * bulletSpeed;
+        return BULLETSPEED * GunData.BulletSpeed;
     }
 }

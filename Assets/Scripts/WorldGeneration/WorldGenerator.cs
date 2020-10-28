@@ -6,8 +6,8 @@ using UnityEngine.AI;
 public class WorldGenerator : MonoBehaviour
 {
     public TileGenerator TilePrefab;
-    public EnemyBehaviour EnemyPrefab;
-    public PlayerBehaviour PlayerPrefab;
+    public EnemyEntity EnemyPrefab;
+    public PlayerEntity PlayerPrefab;
 
     public NavMeshSurface Navigation;
 

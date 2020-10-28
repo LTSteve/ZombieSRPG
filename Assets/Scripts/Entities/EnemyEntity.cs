@@ -6,7 +6,7 @@ using UnityStandardAssets.Characters.ThirdPerson;
 
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(ThirdPersonMover))]
-public class EnemyBehaviour : MonoBehaviour, IEntity
+public class EnemyEntity : MonoBehaviour, IEntity
 {
     [SerializeField]
     private float aimRepositionAngle = -1f;

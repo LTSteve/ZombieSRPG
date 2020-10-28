@@ -42,8 +42,8 @@ GameObject:
   - component: {fileID: 355575429180027798}
   - component: {fileID: 995687460}
   - component: {fileID: 995687462}
-  - component: {fileID: 995687461}
   - component: {fileID: 995687464}
+  - component: {fileID: 5434356816155314870}
   m_Layer: 13
   m_Name: REVOLVER
   m_TagString: Untagged
@@ -109,25 +109,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.25
   m_Center: {x: 0, y: 0, z: 0.3}
---- !u!114 &995687461
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8976702495394722688}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2abeb01a103767d428ca158da1f41ae5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bullet: {fileID: 4041346390090492577, guid: aef9bd21972d7bd46a348d8b367a1c8c, type: 3}
-  bulletSpawnPoint: {fileID: 635437154942358062}
-  bulletSpeed: 0.2
-  bulletBurst: 1
-  burstBulletsPerSecond: 100
-  burstCooldown: 0.52
-  damage: 30
 --- !u!114 &995687464
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -141,6 +122,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactionRadius: 0.5
+--- !u!114 &5434356816155314870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8976702495394722688}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37320541934920b4ea2b1ba15bb40498, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GunData: {fileID: 11400000, guid: c5c14638b25a45346bdb58565b8a29af, type: 2}
+  bulletSpawnPoint: {fileID: 635437154942358062}
 --- !u!1001 &878775231670538960
 PrefabInstance:
   m_ObjectHideFlags: 0

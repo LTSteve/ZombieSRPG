@@ -12,57 +12,62 @@ public class CommandController : MonoBehaviour
     }
     #endregion
 
-    public static List<IEntity> Selected = new List<IEntity>();
-
-    void Update()
+    public static void HandleCommand(Vector3 point, Transform transform)
     {
-        _checkForMouseClick();
+        if (Instance == null) return;
+
+        Instance._handleCommand(point, transform);
     }
 
-    private void _checkForMouseClick()
+    public static List<IEntity> Selected = new List<IEntity>();
+
+    private void _handleCommand(Vector3 point, Transform target)
     {
-        if (!Input.GetMouseButtonDown(0) || Camera.main == null)
+        foreach (var selected in Selected)
         {
-            return;
-        }
+            var interactable = target.GetComponent<IInteractable>();
+            var entity = target.GetComponent<IEntity>();
 
-        var clickRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-        if (Physics.Raycast(clickRay, out var hit))
-        {
-            foreach(var selected in Selected)
+            if (interactable != null)
             {
-                var clickedOn = hit.transform;
-
-                var interactable = clickedOn.GetComponent<IInteractable>();
-                var entity = clickedOn.GetComponent<IEntity>();
-
-                if (interactable != null)
-                {
-                    var actionList = new EntityActionList();
-                    var interactionRadius = interactable.GetInteractionRadius();
-                    if (interactionRadius != -1) 
-                    {
-                        //close the distance first
-                        actionList.AddAction(new NavMoverAction(hit.point, selected, interactionRadius));
-                    }
-
-                    actionList.AddAction(new InteractAction(interactable, selected));
-
-                    selected.AssignNewAction(actionList);
-                }
-                else if(entity != null)
-                {
-                    if(entity != selected)
-                    {
-                        selected.AssignNewAction(new AimAndShootAction(hit.transform, selected, selected.GetWeaponHolder().GetComponentInChildren<IWeapon>()));
-                    }
-                }
-                else //ground
-                {
-                    selected.AssignNewAction(new NavMoverAction(hit.point, selected));
-                }
+                _assignInteractCommand(interactable, point, selected);
+            }
+            else if (entity != null)
+            {
+                _parseEntityCommand(entity, target, selected);
+            }
+            else //ground
+            {
+                _assignMoveCommand(point, selected);
             }
         }
+    }
+
+    private void _assignInteractCommand(IInteractable interactable, Vector3 point, IEntity selected)
+    {
+        var actionList = new EntityActionList();
+        var interactionRadius = interactable.GetInteractionRadius();
+        if (interactionRadius != -1)
+        {
+            //close the distance first
+            actionList.AddAction(new NavMoverAction(point, selected, interactionRadius));
+        }
+
+        actionList.AddAction(new InteractAction(interactable, selected));
+
+        selected.AssignNewAction(actionList);
+    }
+
+    private void _parseEntityCommand(IEntity otherEntity, Transform target, IEntity selected)
+    {
+        if (otherEntity != selected)
+        {
+            selected.AssignNewAction(new AimAndShootAction(target, selected, selected.GetWeaponHolder().GetComponentInChildren<IWeapon>()));
+        }
+    }
+
+    private void _assignMoveCommand(Vector3 point, IEntity selected)
+    {
+        selected.AssignNewAction(new NavMoverAction(point, selected));
     }
 }

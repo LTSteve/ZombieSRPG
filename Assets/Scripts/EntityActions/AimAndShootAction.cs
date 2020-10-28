@@ -3,54 +3,52 @@ using UnityEngine.AI;
 
 public class AimAndShootAction : IEntityAction
 {
-    private AimAtAction aimAction;
-    private IWeapon toShoot;
-    private Transform toShootAt;
+    //manage target redicle
+    private TargetingEffect targetingRedicle;
 
-    private float bulletSpeed;
+    //manage rotation
+    private KeepAlignedAction keepAligned;
 
-    private bool validSetup;
+    //shoot weapon
+    private IWeapon weaponToShoot;
 
-    public AimAndShootAction(Transform toLookAt, IEntity targeter, IWeapon toShoot)
+    private bool validSetup = false;
+
+    public AimAndShootAction(Transform targetToShootAt, IEntity entityHoldingWeapon, IWeapon weaponToShoot)
     {
-        aimAction = new AimAtAction(toLookAt, targeter, true, 1f);
+        targetingRedicle = entityHoldingWeapon?.GetTargeting();
 
-        this.toShoot = toShoot;
-        toShootAt = toLookAt;
-        bulletSpeed = toShoot == null ? 1f : toShoot.GetBulletTravelSpeed();
+        if (targetingRedicle != null)
+            keepAligned = new KeepAlignedAction(entityHoldingWeapon, targetingRedicle.transform);
 
-        validSetup = toShoot != null;
+        this.weaponToShoot = weaponToShoot;
+
+        targetingRedicle?.LockTarget(targetToShootAt, true, weaponToShoot == null ? 1f : weaponToShoot.GetBulletTravelSpeed());
+
+        validSetup = weaponToShoot != null && targetToShootAt != null;
     }
 
     public void Abort()
     {
-        aimAction.Abort();
+        targetingRedicle.UnlockTarget();
     }
 
     public bool IsDone()
     {
-        return _targetIsDead();
+        return !validSetup || targetingRedicle.TargetIsDead();
     }
 
     public void Update()
     {
-        if (_targetIsDead()) return;
+        if (IsDone()) return;
 
-        aimAction.UpdateOvershootSeconds(Vector3.Distance(toShootAt.position,toShoot.GetTransform().position) / bulletSpeed);
+        keepAligned.Update();
 
-        aimAction.Update();
-
-        if (!validSetup) return;
-
-        if (aimAction.IsFullyAimed())
+        //aiming complete & not adjusting rotation
+        if (targetingRedicle.IsFullyAimed() && keepAligned.IsWithinOuterLimit())
         {
             //call weapon shoot
-            toShoot.Shoot();
+            weaponToShoot.Shoot();
         }
-    }
-
-    private bool _targetIsDead()
-    {
-        return toShootAt == null || toShootAt.gameObject == null;
     }
 }

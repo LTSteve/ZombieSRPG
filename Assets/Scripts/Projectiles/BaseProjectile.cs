@@ -2,11 +2,9 @@
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(SphereCollider))]
+[RequireComponent(typeof(LifespanEffect))]
 public class BaseProjectile : MonoBehaviour, IProjectile
 {
-    [SerializeField]
-    protected float lifespan = 3f;
-
     private Rigidbody body;
 
     private float damage;
@@ -18,16 +16,6 @@ public class BaseProjectile : MonoBehaviour, IProjectile
         body.velocity = direction * speed;
 
         this.damage = damage;
-    }
-
-    private void Update()
-    {
-        lifespan -= Time.deltaTime;
-
-        if(lifespan <= 0f)
-        {
-            Destroy(gameObject);
-        }
     }
 
     private void OnTriggerEnter(Collider other)
