@@ -3,7 +3,7 @@
 public class LifespanEffect : MonoBehaviour
 {
     [SerializeField]
-    protected float lifespan = 3f;
+    private float lifespan = 3f;
 
     private void Update()
     {

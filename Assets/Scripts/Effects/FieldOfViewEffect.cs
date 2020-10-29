@@ -23,6 +23,7 @@ public class FieldOfViewEffect : MonoBehaviour
 
         vertices = new Vector3[ViewRayCount + 1];
 
+        //I DON"T THINK THIS IS NECESSARY
         for(var i = 0; i < vertices.Length; i++)
         {
             vertices[i] = Vector3.zero;

@@ -9,6 +9,8 @@ public class BaseHealthHaver : MonoBehaviour, IHealthHaver
     private float spawnHealth = 100f;
     [SerializeField]
     private float health;
+    [SerializeField]
+    private HealthbarEffect healthbar;
 
     private void Start()
     {
@@ -25,6 +27,8 @@ public class BaseHealthHaver : MonoBehaviour, IHealthHaver
             else
                 Die();
         }
+
+        healthbar.UpdateHealth(health / maxHealth);
     }
 
     public void Die()
